@@ -41,7 +41,10 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
         .then(() => this.clientesService.atualizacao.next(1));
     } else {
       this.clientesService.addCliente(novoCliente)
-        .then(() => this.clientesService.atualizacao.next(1));
+        .then(() => {
+          this.clientesService.atualizacao.next(1);
+          this.clientesService.atualizando.next(true);
+        })
     }
     form.reset();
     this.editMode = false;

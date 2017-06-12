@@ -9,6 +9,7 @@ export class ClientesService {
   atualizacao = new Subject<number>();
   editing = new Subject<number>();
   urlCliente = 'http://localhost:1337/cliente';
+  atualizando = new Subject<boolean>();
 
   constructor(private http: Http) {}
 

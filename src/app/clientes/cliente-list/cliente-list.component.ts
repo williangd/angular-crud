@@ -9,6 +9,7 @@ import { Cliente } from '../cliente.model';
 })
 export class ClienteListComponent implements OnInit {
   clientes: Cliente[];
+  atualizando = false;
 
   constructor(private clientesService: ClientesService) { }
 
@@ -22,22 +23,28 @@ export class ClienteListComponent implements OnInit {
     // );
     this.clientesService.atualizacao.subscribe(
       () => {
-        this.listaClintes()
+        this.listaClintes();
       }
     );
     this.listaClintes();
+    this.clientesService.atualizando.subscribe(
+      (response: boolean) => this.atualizando = response
+    )
   }
 
   listaClintes() {
+    this.clientesService.atualizando.next(true);
     this.clientesService.getClientes()
       .then(clientes => {
         this.clientes = clientes;
+        this.clientesService.atualizando.next(false);
       })
   }
 
   remove(id: number) {
     const resposta = confirm('Tem certeza que deseja deletar?');
     if (resposta) {
+      this.clientesService.atualizando.next(true);
       this.clientesService.delCliente(id).then(() => this.clientesService.atualizacao.next(1));
     }
   }
